@@ -43,10 +43,13 @@ const ui = new UI;
 }
 
 function getResponse(){
+    let currentAdvice = localStorage.getItem('id');
+    console.log(currentAdvice);
     ui.load();
     generator.getAdvice().then ( data => {
         if (data){
             ui.stopLoad();
+            localStorage.setItem('id' , data.id)
             ui.updateAdvice(data);
         } else{
             ui.load();
