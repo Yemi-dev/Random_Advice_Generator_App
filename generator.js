@@ -13,10 +13,17 @@ class UI {
     constructor(){
         this.adviceID = document.querySelector('.advice-id');
         this.adviceContent = document.querySelector('.advice-content');
+        this.loader = document.querySelector('.loader');
     }
     updateAdvice(advice){
-        this.adviceID.innerHTML = `${advice.id}`;
+        this.adviceID.innerHTML = `ADVICE #${advice.id}`;
         this.adviceContent.innerHTML =`"${advice.advice}"`
+    }
+    load(){
+        this.loader.classList.remove('d-none')
+    }
+    stopLoad(){
+        this.loader.classList.add('d-none')
     }
 }
 
@@ -28,11 +35,26 @@ const ui = new UI;
       generator.getAdvice().then ( data => {
           if (data){
               ui.updateAdvice(data)
+          } else{
+              ui.load();
           }
       })
    }
 }
 
+function getResponse(){
+    ui.load();
+    generator.getAdvice().then ( data => {
+        if (data){
+            ui.stopLoad();
+            ui.updateAdvice(data);
+        } else{
+            ui.load();
+        }
+    })
+}
+
 document.querySelector('.dice').addEventListener('click', generateAdvice);
+window.document.addEventListener('DOMContentLoaded', getResponse)
 
 
